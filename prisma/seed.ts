@@ -5,11 +5,21 @@ import {
   CreateTeacher,
   CreateTeacherDiscipline,
   CreateTerm,
+  CreateUser
 } from "../src/interfaces/createData.js";
+
+import * as passUtils from "../src/utils/passUtils.js"; 
 
 const prisma = new PrismaClient();
 
 async function main() {
+
+  const createUser: CreateUser = {
+    email: "admin@admin.com",
+    password: passUtils.encryptPassword("admin123"),
+  }
+
+
   const terms: CreateTerm[] = [
     {
       number: 1,

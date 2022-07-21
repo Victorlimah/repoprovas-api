@@ -19,10 +19,13 @@ export async function create(user: userType) {
 
 export async function login(user: userType) {
   const userExists = await repository.search("email", user.email);
+  
+  if (!userExists)
+  throw { type: "unauthorized", message: "Invalid credentials. Try again." };
+  
   const isValid = passUtils.decryptPassword(user.password, userExists.password);
-
-  if (!userExists || !isValid)
-    throw { type: "unauthorized", message: "Invalid credentials. Try again." };
+  if (!isValid)
+  throw { type: "unauthorized", message: "Invalid credentials. Try again." };
 
   const data = { id: userExists.id, email: userExists.email };
   const token = jwt.sign(data, process.env.JWT_SECRET);
