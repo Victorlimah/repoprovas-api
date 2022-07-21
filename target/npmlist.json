@@ -1,0 +1,1 @@
+{"version":"1.0.0","name":"my-project-template","dependencies":{"@prisma/client":{"version":"4.0.0"},"chalk":{"version":"5.0.1"},"cors":{"version":"2.8.5"},"dotenv":{"version":"16.0.1"},"express-async-errors":{"version":"3.1.1"},"express":{"version":"4.18.1"},"joi":{"version":"17.6.0"},"prisma":{"version":"4.0.0"}}}
