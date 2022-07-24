@@ -1,10 +1,12 @@
 import { Test } from '@prisma/client';
+import { TeacherDiscipline } from '@prisma/client';
 
 import * as testRepository from '../repositories/testRepository.js';
 import * as categoriesRepository from '../repositories/categoriesRepository.js';
 import * as teacherDisciplineRepository from "../repositories/teacherDisciplinesRepository.js";
 
-export type TestData = Omit<Test, 'id' | 'createdAt'>;
+export type TestData = Omit<Test, "id" | "createdAt">;
+export type TestWithDiscipline = Omit<TeacherDiscipline, "id" | "createdAt">;
 
 export async function create(test: TestData) {
   const category = await categoriesRepository.findById(test.categoryId);
@@ -16,7 +18,28 @@ export async function create(test: TestData) {
   return testCreated;
 }
 
-export async function getTeacherDispline(teacherId: number, disciplineId: number) {
+export async function getByTeacher(teacherId: number) {
+  const disciplines = await teacherDisciplineRepository.findByTeacher(teacherId);
+
+  if (!disciplines)
+    throw { type: "NotFound", message: "This teacher doesn't have any discipline" };
+
+  const tests = await Promise.all(disciplines.map(async (teacherDiscipline: TeacherDiscipline) => {
+    const discipline = await testRepository.findByTeacher(teacherDiscipline);
+
+    return {
+      discipline,
+    };
+  }));
+
+  const disciplinesWithTests = tests.filter((test) => {
+    return test.discipline.tests.length > 0;
+  })
+
+  return disciplinesWithTests;
+}
+
+async function getTeacherDispline(teacherId: number, disciplineId: number) {
   const teacherDiscipline = await teacherDisciplineRepository.findByTeacherAndDiscipline(teacherId, disciplineId);
 
   if (!teacherDiscipline) 

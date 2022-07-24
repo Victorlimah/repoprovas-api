@@ -10,22 +10,23 @@ afterAll(async () => {
   await prisma.$executeRaw`TRUNCATE TABLE tests;`;
 });
 
-let token = null;
-let user = null;
-
 describe("POST /signup", () => {
   it("Create a account sucess 201", async () => {
-    user = userFactory.userFactory();
+    const user = userFactory.userFactory();
+
     const body = { ...user, confirmPassword: user.password };
     const result = await supertest(app).post("/signup").send(body);
+
     const status = result.status;
     expect(status).toEqual(201);
   });
 
   it("Create a account already exists 409", async () => {
     const body = { ...userFactory.adminFactory(), confirmPassword: "admin123" };
+
     await supertest(app).post("/signup").send(body);
     const result = await supertest(app).post("/signup").send(body);
+
     const status = result.status;
     expect(status).toEqual(409);
   });
@@ -59,7 +60,7 @@ describe("POST /test", () => {
     await supertest(app).post("/signup").send(body);
 
     const result = await supertest(app).post("/signin").send({ ...user });
-    token = result.body.token;
+    const token = result.body.token;
 
     const test = await testFactory.testFactory(true);
     const resultTest = await supertest(app).post("/test").set("Authorization", `Bearer ${token}`).send(test);

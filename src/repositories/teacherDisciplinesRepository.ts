@@ -8,3 +8,11 @@ export async function findByTeacherAndDiscipline(teacherId: number, disciplineId
     },
   });
 }
+
+export async function findByTeacher(teacherId: number) {
+  return prisma.teacherDiscipline.findMany({
+    where: {
+      teacherId,
+    },
+  });
+}

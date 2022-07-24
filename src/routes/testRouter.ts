@@ -11,7 +11,7 @@ const testRouter = Router();
 testRouter.use(validateJWT);
 
 testRouter.post("/test", validateSchema(testSchema), controller.create);
-testRouter.get("/test/teacher/:id");
+testRouter.get("/test/teacher/:id", controller.getByTeacher);
 testRouter.get("/test/discipline/:id");
 
 export default testRouter;
