@@ -33,63 +33,62 @@ describe("POST /signup", () => {
 
 describe("POST /login", () => {
   it("Login sucess 200", async () => {
-    user = userFactory.adminFactory();
-    const result = await supertest(app).post("/signin").send(user);
-    token = result.body.token;
-    console.log(result.body)
-    expect(result.status).toEqual(200);
+    const user = userFactory.userFactory();
+    const body = { ...user, confirmPassword: user.password };
+    await supertest(app).post("/signup").send(body);
+
+    const result = await supertest(app).post("/signin").send({ ...user });
+    const status = result.status;
+    expect(status).toEqual(200);
   });
 
-  it("Login wrong password 401", async () => {
-    const register = userFactory.userFactory();
-    await supertest(app).post("/signup").send(register);
+  it("Login wrong credentials 401", async () => {
+    const user = userFactory.adminFactory();
 
-    const login = { email: register.email, password: "wrongPassword" };
-    const result2 = await supertest(app).post("/signin").send(login);
-
-    const status = result2.status;
+    const result = await supertest(app).post("/signin").send({ ...user, password: "wrongpass" });
+    const status = result.status;
+    console.error(result.body);
     expect(status).toEqual(401);
   });
 
-  it("Login wrong email 401", async () => {
-    const register = userFactory.userFactory();
-    await supertest(app).post("/signup").send(register);
-
-    const login = { password: register.password, email: "wrong@email.com" };
-    const result2 = await supertest(app).post("/signin").send(login);
-
-    const status = result2.status;
-    expect(status).toEqual(401);
-  });
 });
 
 describe("POST /test", () => {
   it("Create a new test 201", async () => {
-    const body = testFactory.cardFactory(1,1);
-    const value = token;
-    const response = await supertest(app)
-      .post("/test")
-      .send(body)
-      .set({ Authorization: `Bearer ${value}` });
+    const user = userFactory.userFactory();
+    const body = { ...user, confirmPassword: user.password };
+    await supertest(app).post("/signup").send(body);
 
-    expect(response.status).toBe(201);
+    const result = await supertest(app).post("/signin").send({ ...user });
+    token = result.body.token;
+
+    const test = await testFactory.testFactory(true);
+    const resultTest = await supertest(app).post("/test").set("Authorization", `Bearer ${token}`).send(test);
+    const status = resultTest.status;
+    expect(status).toEqual(201);
   });
 
   it("Create a new test without send token 401", async () => {
-    const body = testFactory.cardFactory();
-    const response = await supertest(app).post("/test").send(body);
+    const body = await testFactory.testFactory();
+    const response = await supertest(app)
+      .post("/test")
+      .send(body);
 
-    expect(response.status).toBe(401);
+    const status = response.status;
+    expect(status).toBe(401);
   });
 
   it("Create a new test with ids not found 404", async () => {
-    const body = testFactory.cardFactory();
-    const value = token;
+    const user = userFactory.adminFactory();
+    const login = await supertest(app).post("/signin").send(user);
+
+    const body = await testFactory.testFactory();
     const response = await supertest(app)
       .post("/test")
-      .send(body)
-      .set({ "Authorization": `Bearer ${value}` });
+      .set("Authorization", `Bearer ${login.body.token}`)
+      .send(body);
 
-    expect(response.status).toBe(404);
+    const status = response.status;
+    expect(status).toBe(404);
   });
 });
