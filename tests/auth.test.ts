@@ -31,7 +31,7 @@ describe("POST /signup", () => {
   });
 });
 
-describe("POST /login", () => {
+describe("POST /signin", () => {
   it("Login sucess 200", async () => {
     const user = userFactory.userFactory();
     const body = { ...user, confirmPassword: user.password };
@@ -44,10 +44,9 @@ describe("POST /login", () => {
 
   it("Login wrong credentials 401", async () => {
     const user = userFactory.adminFactory();
-
     const result = await supertest(app).post("/signin").send({ ...user, password: "wrongpass" });
+
     const status = result.status;
-    console.error(result.body);
     expect(status).toEqual(401);
   });
 
