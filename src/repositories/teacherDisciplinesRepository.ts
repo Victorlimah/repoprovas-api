@@ -1,9 +1,10 @@
 import { prisma } from "../data/db.js";
 
-export async function findById(id: number) {
+export async function findByTeacherAndDiscipline(teacherId: number, disciplineId: number) {
   return prisma.teacherDiscipline.findFirst({
     where: {
-      id,
+      teacherId,
+      disciplineId,
     },
   });
 }

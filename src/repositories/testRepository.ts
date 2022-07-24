@@ -1,7 +1,8 @@
-import { Test } from "@prisma/client";
 import { prisma } from "../data/db.js";
 
-export async function create(test: Test) {
+import { TestData } from "../services/testService.js";
+
+export async function create(test: TestData) {
   const testCreated = await prisma.test.create({
     data: {
       ...test,
