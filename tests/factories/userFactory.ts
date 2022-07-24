@@ -7,7 +7,6 @@ export function userFactory() {
   return {
     email,
     password,
-    confirmPassword: password 
   };
 }
 

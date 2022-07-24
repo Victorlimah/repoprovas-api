@@ -17,7 +17,7 @@ async function main() {
   const createUser: CreateUser = {
     email: "admin@admin.com",
     password: passUtils.encryptPassword("admin123"),
-  }
+  };
 
 
   const terms: CreateTerm[] = [
@@ -108,6 +108,7 @@ async function main() {
     },
   ];
 
+  await prisma.user.create({ data: createUser });
   await prisma.term.createMany({ data: terms });
   await prisma.category.createMany({ data: categories });
   await prisma.teacher.createMany({ data: teachers });
