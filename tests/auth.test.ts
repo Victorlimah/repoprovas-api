@@ -1,9 +1,6 @@
 import app from "../src/index.js";
 import supertest from "supertest";
 
-//TODO: criar testes dos efeitos colaterais
-//TODO: criar testes de integração dos gets em /test
-
 import { prisma } from "../src/data/db.js";
 import * as userFactory from "./factories/userFactory.js";
 import * as testFactory from "./factories/testFactory.js";
