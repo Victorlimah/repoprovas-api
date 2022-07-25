@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 
 import * as repository from "../repositories/userRepository.js";
-import * as passUtils from "../../../driven-pass-api/src/utils/passUtils.js";
+import * as passUtils from "../utils/passUtils.js";
 
 export type userType = Omit<User, "id" | "createdAt">;
 
