@@ -12,12 +12,20 @@ export async function testFactory(testValid: boolean = false) {
     const category = await prisma.category.findFirst({ where: { name: "Projeto" } });
     categoryId = category.id;
 
-    const teacher = await prisma.teacher.findFirst({ where: { name: "Diego Pinho" } });
+    const teacher = await getTeacher();
     teacherId = teacher.id;
 
-    const discipline = await prisma.discipline.findFirst({ where: { name: "JavaScript" } });
+    const discipline = await getDiscipline();
     disciplineId = discipline.id;
   }
 
   return { name, pdfUrl, categoryId, teacherId, disciplineId };
+}
+
+export async function getTeacher() {
+  return await prisma.teacher.findFirst({ where: { name: "Diego Pinho" } });
+}
+
+export async function getDiscipline() {
+  return await prisma.discipline.findFirst({ where: { name: "JavaScript" } });
 }
