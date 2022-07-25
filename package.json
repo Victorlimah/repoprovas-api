@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/repo-provas-api/src/configs/server.js",
+    "start": "node dist/src/configs/server.js",
     "dev": "nodemon src/configs/server.ts",
     "test": "dotenv -e .env.test prisma migrate dev && NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i"
   },
