@@ -74,3 +74,15 @@ export async function testFactory(test: {
     teacherDisciplineId: teacherDiscipline.id,
   };
 }
+
+export async function getDisciplines() {
+  const disciplines = await teacherDisciplineRepository.findDisciplines();
+
+  return disciplines;
+}
+
+export async function getTeachers() {
+  const teachers = await teacherDisciplineRepository.findTeachers();
+
+  return teachers;
+}
