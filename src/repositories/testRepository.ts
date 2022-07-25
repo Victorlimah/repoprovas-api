@@ -28,15 +28,6 @@ export async function findByTeacher(teacherDiscipline: TeacherDiscipline) {
     },
   });
 
-  const teacher = await prisma.teacher.findFirst({
-    where: {
-      id: teacherDiscipline.teacherId,
-    },
-    select: {
-      name: true,
-    },
-  });
-
   const tests = await prisma.test.findMany({
     where: {
       teacherDisciplineId: teacherDiscipline.id,
@@ -70,7 +61,6 @@ export async function findByTeacher(teacherDiscipline: TeacherDiscipline) {
   return {
     term: discipline.term.number,
     name: discipline.name,
-    teacher: teacher.name,
     tests: testsWithCategory,
   };
 }
