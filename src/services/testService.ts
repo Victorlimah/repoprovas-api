@@ -39,6 +39,12 @@ export async function getByTeacher(teacherId: number) {
   return disciplinesWithTests;
 }
 
+export async function getByDiscipline(disciplineId: number) {
+  const discipline = await testRepository.findByDiscpline(disciplineId);
+
+  return discipline;
+}
+
 async function getTeacherDispline(teacherId: number, disciplineId: number) {
   const teacherDiscipline = await teacherDisciplineRepository.findByTeacherAndDiscipline(teacherId, disciplineId);
 

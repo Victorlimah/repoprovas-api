@@ -28,6 +28,15 @@ export async function findByTeacher(teacherDiscipline: TeacherDiscipline) {
     },
   });
 
+  const teacher = await prisma.teacher.findFirst({
+    where: {
+      id: teacherDiscipline.teacherId,
+    },
+    select: {
+      name: true,
+    },
+  });
+
   const tests = await prisma.test.findMany({
     where: {
       teacherDisciplineId: teacherDiscipline.id,
@@ -60,8 +69,33 @@ export async function findByTeacher(teacherDiscipline: TeacherDiscipline) {
 
   return {
     term: discipline.term.number,
+    teacher: teacher.name,
     name: discipline.name,
     tests: testsWithCategory,
   };
 }
 
+export async function findByDiscpline(disciplineId: number) {
+  const disciplines = await prisma.teacherDiscipline.findMany({
+    where: {
+      disciplineId,
+    },
+  });
+
+  if (!disciplines)
+    throw { type: "NotFound", message: "This discipline doesn't have classes" };
+
+  const tests = await Promise.all(disciplines.map(async (teacherDiscipline: TeacherDiscipline) => {
+    const discipline = await findByTeacher(teacherDiscipline);
+
+    return {
+      discipline,
+    };
+  }));
+
+  const disciplinesWithTests = tests.filter((test) => {
+    return test.discipline.tests.length > 0;
+  })
+
+  return disciplinesWithTests;
+}

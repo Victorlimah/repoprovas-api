@@ -18,7 +18,7 @@ describe("POST /signup", () => {
     const result = await supertest(app).post("/signup").send(body);
 
     const status = result.status;
-    expect(status).toEqual(201);
+    expect(status).toBe(201);
   });
 
   it("Create a account already exists 409", async () => {
@@ -28,7 +28,7 @@ describe("POST /signup", () => {
     const result = await supertest(app).post("/signup").send(body);
 
     const status = result.status;
-    expect(status).toEqual(409);
+    expect(status).toBe(409);
   });
 });
 
@@ -36,11 +36,12 @@ describe("POST /signin", () => {
   it("Login sucess 200", async () => {
     const user = userFactory.userFactory();
     const body = { ...user, confirmPassword: user.password };
-    await supertest(app).post("/signup").send(body);
 
+    await supertest(app).post("/signup").send(body);
     const result = await supertest(app).post("/signin").send({ ...user });
-    const status = result.status;
-    expect(status).toEqual(200);
+
+    expect(result.status).toBe(200);
+    expect(result.body).toHaveProperty("token");
   });
 
   it("Login wrong credentials 401", async () => {
@@ -48,7 +49,7 @@ describe("POST /signin", () => {
     const result = await supertest(app).post("/signin").send({ ...user, password: "wrongpass" });
 
     const status = result.status;
-    expect(status).toEqual(401);
+    expect(status).toBe(401);
   });
 
 });
@@ -65,7 +66,7 @@ describe("POST /test", () => {
     const test = await testFactory.testFactory(true);
     const resultTest = await supertest(app).post("/test").set("Authorization", `Bearer ${token}`).send(test);
     const status = resultTest.status;
-    expect(status).toEqual(201);
+    expect(status).toBe(201);
   });
 
   it("Create a new test without send token 401", async () => {
