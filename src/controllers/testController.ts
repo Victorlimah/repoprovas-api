@@ -20,3 +20,13 @@ export async function getByDiscipline(req: Request, res: Response) {
   const tests = await service.getByDiscipline(id);
   res.status(200).send(tests);
 }
+
+export async function getDisciplines(req: Request, res: Response) {
+  const disciplines = await service.getDisciplines();
+  res.status(200).send(disciplines);
+}
+
+export async function getTeachers(req: Request, res: Response) {
+  const teachers = await service.getTeachers();
+  res.status(200).send(teachers);
+}

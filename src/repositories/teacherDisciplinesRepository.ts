@@ -16,3 +16,11 @@ export async function findByTeacher(teacherId: number) {
     },
   });
 }
+
+export async function findDisciplines() {
+  return prisma.discipline.findMany();
+}
+
+export async function findTeachers() {
+  return prisma.teacher.findMany();
+}

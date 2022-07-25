@@ -14,4 +14,7 @@ testRouter.post("/test", validateSchema(testSchema), controller.create);
 testRouter.get("/test/teacher/:id", controller.getByTeacher);
 testRouter.get("/test/discipline/:id", controller.getByDiscipline);
 
+testRouter.get("/disciplines", controller.getDisciplines);
+testRouter.get("/teachers", controller.getTeachers);
+
 export default testRouter;
